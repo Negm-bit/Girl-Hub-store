@@ -315,3 +315,20 @@ html[dir="ltr"] .header-inner{direction:ltr}html[dir="ltr"] .header-right{direct
 .clothes-category .card{transition:transform .35s ease,box-shadow .35s ease}
 .clothes-category .card:hover{transform:translateY(-7px);box-shadow:0 18px 38px rgba(82,47,39,.12)}
 @media(prefers-reduced-motion:reduce){.gh-reveal,.clothes-motion,.clothes-card-motion{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}
+
+/* Mobile header sizing fix — preserves the V17 design/content */
+@media(max-width:600px){
+  .figma-header{height:64px}
+  .header-inner{height:64px;padding:0 8px;max-width:none}
+  .figma-header .navlinks{gap:7px}
+  .figma-header .navlinks a{font-size:8px;white-space:nowrap}
+  .figma-header .logo{width:60px;height:50px}
+  .header-left{gap:4px}
+  .mini-user{width:15px;height:15px;font-size:6px;line-height:15px}
+  .cart-icon{font-size:14px}
+  .wish-icon{font-size:18px;width:20px;height:24px;margin:0 1px}
+  .lang{font-size:8px;margin:0}
+  .lang-toggle{padding:3px 4px;font-size:8px}
+  .search-pill{width:68px;height:26px;border-radius:7px;padding:0 7px;font-size:8px}
+  .figma-header .badge{width:15px;height:15px;top:-6px;right:-6px;font-size:7px}
+}
