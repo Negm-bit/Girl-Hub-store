@@ -413,3 +413,46 @@ body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer
 @media(max-width:380px){
   .mobile-contact{min-width:42px;height:26px;font-size:7px;padding:0 6px}
 }
+
+/* V20: make the Contact link actually visible on mobile */
+@media (max-width:600px){
+  .figma-header .header-right{
+    position:absolute;
+    left:8px;
+    top:0;
+    width:190px;
+    height:82px;
+    display:flex;
+    align-items:center;
+    z-index:6;
+    overflow:visible;
+  }
+  .figma-header .navlinks{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    white-space:nowrap;
+    overflow:visible;
+  }
+  .figma-header .navlinks a{
+    flex:0 0 auto;
+    font-size:8.5px;
+    line-height:1;
+    padding:7px 2px;
+  }
+  .figma-header .navlinks a:last-child{
+    color:#e98cb0!important;
+    font-weight:800;
+  }
+  .figma-header .header-left{
+    position:relative;
+    z-index:7;
+  }
+}
+@media (max-width:380px){
+  .figma-header .header-right{left:6px;width:177px}
+  .figma-header .navlinks{gap:5px}
+  .figma-header .navlinks a{font-size:8px;padding-left:1px;padding-right:1px}
+}
