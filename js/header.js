@@ -10,6 +10,15 @@ function header(active=''){
         </nav>
       </div>
       <a href="home.html" class="brand-center" aria-label="Girl Hub"><img class="logo" src="assets/images/logo.png" alt="Girl hub"></a>
+      <button class="mobile-menu-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-menu" id="mobileMenu" hidden>
+        <a class="${active==='home'?'active':''}" href="home.html">الرئيسية</a>
+        <a class="${active==='clothes'?'active':''}" href="clothes.html">ملابس</a>
+        <a class="${active==='accessories'?'active':''}" href="accessories.html">اكسسوارات</a>
+        <a href="https://wa.me/201279860213" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+      </div>
       <div class="header-left">
         <a class="mobile-contact" href="https://wa.me/201279860213" target="_blank" rel="noopener noreferrer">تواصل</a>
         <button class="mini-user" aria-label="الحساب">●</button>
@@ -37,4 +46,23 @@ function footer(){
     <div class="footer-bottom exact-bottom"><span>صمم بكل حب لـ GIRL HUB © ٢٠٢٦</span><span>جميع الحقوق محفوظة لزينب محمود</span></div>
   </footer>`
 }
-function mountHeader(active){document.body.insertAdjacentHTML('afterbegin',header(active));document.body.insertAdjacentHTML('beforeend',footer())}
+function mountHeader(active){
+  document.body.insertAdjacentHTML('afterbegin',header(active));
+  document.body.insertAdjacentHTML('beforeend',footer());
+  const toggle=document.querySelector('.mobile-menu-toggle');
+  const menu=document.querySelector('.mobile-menu');
+  if(toggle && menu){
+    const closeMenu=()=>{menu.hidden=true;toggle.classList.remove('open');toggle.setAttribute('aria-expanded','false')};
+    toggle.addEventListener('click',()=>{
+      const open=menu.hidden;
+      menu.hidden=!open;
+      toggle.classList.toggle('open',open);
+      toggle.setAttribute('aria-expanded',String(open));
+    });
+    menu.addEventListener('click',e=>{if(e.target.closest('a')) closeMenu()});
+    document.addEventListener('click',e=>{
+      if(!e.target.closest('.mobile-menu') && !e.target.closest('.mobile-menu-toggle')) closeMenu();
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') closeMenu()});
+  }
+}
