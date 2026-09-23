@@ -402,3 +402,14 @@ body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer
 @media(prefers-reduced-motion:reduce){
   .splash-page .splash-card,.splash-page .splash-logo,.splash-page .splash-card h1,.splash-page .splash-card .splash-subtitle,.splash-page .splash-card .splash-btn{animation:none;opacity:1;transform:none;filter:none}
 }
+
+.mobile-contact{display:none;align-items:center;justify-content:center;height:27px;min-width:45px;padding:0 7px;border-radius:14px;background:#ee8eae;color:#fff!important;font-family:Cairo,Arial,sans-serif;font-size:8px;font-weight:700;white-space:nowrap;box-shadow:0 4px 10px rgba(233,142,175,.18)}
+.mobile-contact:active{transform:scale(.96)}
+@media(max-width:600px){
+  .mobile-contact{display:flex}
+  .mini-user{display:none}
+  .header-left{gap:4px}
+}
+@media(max-width:380px){
+  .mobile-contact{min-width:42px;height:26px;font-size:7px;padding:0 6px}
+}
