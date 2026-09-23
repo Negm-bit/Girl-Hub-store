@@ -420,21 +420,3 @@ body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer
   .checkout-item small{font-size:8px}
   .checkout-item-total{font-size:10px}
 }
-
-/* Mobile navigation: keep all four header links visible, including تواصل معنا */
-@media(max-width:900px){
-  .header{height:112px;min-height:112px;position:relative}
-  .header-inner{height:82px;min-height:82px}
-  .figma-header .header-right{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;align-items:center;justify-content:center;background:#fffaf8;border-top:1px solid #f4e8e5;z-index:2}
-  .figma-header .navlinks{display:flex!important;align-items:center;justify-content:center;gap:18px;width:100%;margin:0;padding:0 8px;white-space:nowrap;overflow:visible}
-  .figma-header .navlinks a{display:block!important;font-size:9px;line-height:30px;white-space:nowrap}
-}
-@media(max-width:600px){
-  .header{height:112px;min-height:112px}
-  .figma-header .navlinks{gap:13px}
-  .figma-header .navlinks a{font-size:8px}
-}
-@media(max-width:380px){
-  .figma-header .navlinks{gap:9px;padding:0 5px}
-  .figma-header .navlinks a{font-size:7.5px}
-}
