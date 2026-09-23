@@ -7,8 +7,7 @@
 <body class="figma-home">
 <main>
   <section class="gh-hero" aria-label="الجديد من Girl Hub">
-    <div class="gh-hero-slide is-active"><img class="gh-hero-bg" src="assets/images/hero2.jpg" alt="مجموعة Girl Hub الجديدة"></div>
-    <div class="gh-hero-slide"><img class="gh-hero-bg" src="assets/images/hero2.jpg" alt="تشكيلة ملابس Girl Hub"></div>
+    <img class="gh-hero-bg" src="assets/images/hero-reference.png" alt="مجموعة Girl Hub الجديدة">
     <div class="gh-hero-shade"></div>
     <div class="gh-hero-content">
       <div class="gh-hero-eyebrow">NEW COLLECTION / ٢٠٢٦</div>
@@ -16,9 +15,7 @@
       <p>تألقي بمظهر فريد يجمع بين الأصالة الكلاسيكية والجرأة العصرية المصممة خصيصًا لك.</p>
       <a class="gh-hero-btn" href="new-products.html">تسوق الآن <span>←</span></a>
     </div>
-    <div class="gh-hero-dots" aria-label="تبديل صور الهيرو"><i class="active"></i><i></i></div>
-    <button class="gh-hero-nav gh-hero-prev" type="button" aria-label="الصورة السابقة">‹</button>
-    <button class="gh-hero-nav gh-hero-next" type="button" aria-label="الصورة التالية">›</button>
+    <div class="gh-hero-dots" aria-hidden="true"><i class="active"></i><i></i><i></i></div>
   </section>
 
   <section class="discounts-section">
@@ -28,10 +25,27 @@
     </div>
     <div class="slider-arrows">
       <button type="button" class="discount-prev" aria-label="السابق">←</button>
-      <button type="button" class="discount-next" aria-label="التالي">→</button>
+      <button type="button" class="discount-next active" aria-label="التالي">→</button>
     </div>
     <div class="discount-viewport">
-      <div class="discount-grid" id="discountGrid"></div>
+      <div class="discount-grid" id="discountGrid">
+        <article class="figma-product-card">
+          <a href="product.html?id=13" class="product-image"><img src="assets/images/home-watch.png" alt="ساعة يد كلاسيكية ذهبية"><span class="discount-badge">%٢٥ خصم</span></a>
+          <div class="product-name">ساعة يد كلاسيكية ذهبية</div><div class="product-price"><strong>٢٩٩ ر.س</strong><del>٣٩٩ ر.س</del></div>
+        </article>
+        <article class="figma-product-card">
+          <a href="product.html?id=16" class="product-image"><img src="assets/images/home-scarf.png" alt="شال صوف دافئ محبوب بالذهب"><span class="discount-badge">%٦٥ خصم</span></a>
+          <div class="product-name">شال صوف دافئ محبوب بالذهب</div><div class="product-price"><strong>١٥٩ ر.س</strong><del>٢٥٠ ر.س</del></div>
+        </article>
+        <article class="figma-product-card">
+          <a href="product.html?id=16" class="product-image"><img src="assets/images/home-bag.png" alt="حقيبة جلدية راقية"><span class="discount-badge">%٣٠ خصم</span></a>
+          <div class="product-name">حقيبة جلدية راقية</div><div class="product-price"><strong>٢١٥ ر.س</strong><del>٣٠٥ ر.س</del></div>
+        </article>
+        <article class="figma-product-card">
+          <a href="product.html?id=2" class="product-image"><img src="assets/images/home-coat.png" alt="معطف شتوي كلاسيك فاخر"><span class="discount-badge">%٣٠ خصم</span></a>
+          <div class="product-name">معطف شتوي كلاسيك فاخر</div><div class="product-price"><strong>٥٩٩ ر.س</strong><del>٨٥٠ ر.س</del></div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -53,5 +67,20 @@
 </main>
 <div class="toast"></div>
 <script src="js/products.js"></script><script src="js/header.js"></script><script src="js/page.js"></script><script src="js/main.js"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>{const hero=document.querySelector('.gh-hero');if(!hero)return;hero.classList.add('loaded');const slides=[...hero.querySelectorAll('.gh-hero-slide')],dots=[...hero.querySelectorAll('.gh-hero-dots i')];let i=0,timer;const go=n=>{i=(n+slides.length)%slides.length;slides.forEach((s,k)=>s.classList.toggle('is-active',k===i));dots.forEach((d,k)=>d.classList.toggle('active',k===i));hero.classList.remove('hero-pulse');void hero.offsetWidth;hero.classList.add('hero-pulse')};const restart=()=>{clearInterval(timer);timer=setInterval(()=>go(i+1),6000)};hero.querySelector('.gh-hero-next')?.addEventListener('click',()=>{go(i+1);restart()});hero.querySelector('.gh-hero-prev')?.addEventListener('click',()=>{go(i-1);restart()});dots.forEach((d,k)=>d.addEventListener('click',()=>{go(k);restart()}));go(0);restart()});</script>
+<script>
+(function(){
+  const hero=document.querySelector('.gh-hero');
+  if(hero){ setTimeout(()=>hero.classList.add('loaded'),80); }
+  const grid=document.getElementById('discountGrid'), prev=document.querySelector('.discount-prev'), next=document.querySelector('.discount-next');
+  let page=0;
+  function move(dir){
+    if(window.innerWidth<=700){ return; }
+    page=Math.max(0,Math.min(1,page+dir));
+    grid.style.transform='translateX('+(page*24)+'px)';
+  }
+  prev?.addEventListener('click',()=>move(-1)); next?.addEventListener('click',()=>move(1));
+  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.15});
+  document.querySelectorAll('.gh-reveal,.figma-product-card').forEach((el,i)=>{el.style.setProperty('--delay',(i*70)+'ms');observer.observe(el)});
+})();
+</script>
 </body></html>
