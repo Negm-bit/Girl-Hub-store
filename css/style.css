@@ -402,3 +402,39 @@ body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer
 @media(prefers-reduced-motion:reduce){
   .splash-page .splash-card,.splash-page .splash-logo,.splash-page .splash-card h1,.splash-page .splash-card .splash-subtitle,.splash-page .splash-card .splash-btn{animation:none;opacity:1;transform:none;filter:none}
 }
+
+/* V17 checkout mobile quantity visibility + clearer order items */
+.checkout-item-main{display:flex;align-items:center;gap:11px;min-width:0}
+.checkout-item-main img{width:48px;height:58px;object-fit:cover;border-radius:7px;background:#f8eee9;flex:0 0 48px}
+.checkout-item-info{min-width:0;display:flex;flex-direction:column;gap:3px}
+.checkout-item-name{font-size:12px;color:#5f4740;line-height:1.5}
+.checkout-qty{display:inline-flex;align-items:center;width:max-content;padding:3px 8px;border-radius:999px;background:#fde8ef;color:#d87599;font-size:10px;font-weight:700}
+.checkout-qty b{margin-inline-start:4px}
+.checkout-item-total{white-space:nowrap;font-size:11px;color:#e07fa4}
+@media(max-width:600px){
+  .checkout-item{gap:8px;padding:11px 0}
+  .checkout-item-main{gap:8px;flex:1}
+  .checkout-item-main img{width:42px;height:52px;flex-basis:42px}
+  .checkout-item-name{font-size:10px;max-width:145px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .checkout-qty{font-size:9px;padding:3px 7px}
+  .checkout-item small{font-size:8px}
+  .checkout-item-total{font-size:10px}
+}
+
+/* Mobile navigation: keep all four header links visible, including تواصل معنا */
+@media(max-width:900px){
+  .header{height:112px;min-height:112px;position:relative}
+  .header-inner{height:82px;min-height:82px}
+  .figma-header .header-right{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;align-items:center;justify-content:center;background:#fffaf8;border-top:1px solid #f4e8e5;z-index:2}
+  .figma-header .navlinks{display:flex!important;align-items:center;justify-content:center;gap:18px;width:100%;margin:0;padding:0 8px;white-space:nowrap;overflow:visible}
+  .figma-header .navlinks a{display:block!important;font-size:9px;line-height:30px;white-space:nowrap}
+}
+@media(max-width:600px){
+  .header{height:112px;min-height:112px}
+  .figma-header .navlinks{gap:13px}
+  .figma-header .navlinks a{font-size:8px}
+}
+@media(max-width:380px){
+  .figma-header .navlinks{gap:9px;padding:0 5px}
+  .figma-header .navlinks a{font-size:7.5px}
+}
