@@ -32,7 +32,37 @@ function renderCart(){const box=$('.cart-list');if(!box)return;const c=getCart()
  box.innerHTML=c.map(i=>{const p=getProduct(i.id);if(!p)return '';return `<div class="cart-row"><img src="${p.img}" alt="${productName(p)}"><div><h3>${productName(p)}</h3><small>${tr('size')}: <strong>${i.size||'M'}</strong> · ${tr('color')}: <strong>${cartColorName(i)}</strong><br>${money(p.price)}</small></div><div class="qty"><button data-dec="${i.key}">−</button><span>${i.qty}</span><button data-inc="${i.key}">+</button></div><strong class="row-price">${money(p.price*i.qty)}</strong><button class="iconbtn" data-remove="${i.key}">×</button></div>`}).join('');
  const total=c.reduce((s,i)=>{const p=getProduct(i.id);return s+(p?p.price*i.qty:0)},0);if($('.subtotal'))$('.subtotal').textContent=money(total);if($('.total'))$('.total').textContent=money(total+50);applyLanguage();}
 function discountItems(){return PRODUCTS.filter(p=>p.old&&p.old>p.price).sort((a,b)=>((b.old-b.price)/b.old)-((a.old-a.price)/a.old)).slice(0,8)}
-function initDiscountSlider(){const grid=$('#discountGrid');if(!grid)return;const items=discountItems();if(!items.length)return;if(grid.dataset.sliderReady==='1'){refreshDiscountSliderLanguage(grid,items);return}grid.dataset.sliderReady='1';grid.innerHTML=[...items,...items].map(p=>`<article class="figma-product-card"><a href="product.html?id=${p.id}" class="product-image"><img src="${p.img}" alt="${productName(p)}"><span class="discount-badge">${Math.round((1-p.price/p.old)*100)}% ${getLang()==='en'?'OFF':'خصم'}</span></a><div class="product-name">${productName(p)}</div><div class="product-price"><strong>${money(p.price)}</strong><del>${money(p.old)}</del></div></article>`).join('');let index=0,timer;const getVisible=()=>window.innerWidth<=600?2:window.innerWidth<=900?2:4;const step=()=>{const first=grid.querySelector('.figma-product-card');if(!first)return 0;return first.getBoundingClientRect().width+(parseFloat(getComputedStyle(grid).gap)||0)};const render=(animate=true)=>{grid.style.transition=animate?'transform .62s cubic-bezier(.22,.8,.2,1)':'none';grid.style.transform=`translate3d(${-index*step()}px,0,0)`};const resetLoop=()=>{if(index>=items.length){index=0;render(false)}};const moveNext=()=>{index++;render(true);if(index>=items.length)setTimeout(resetLoop,650)};const movePrev=()=>{if(index<=0){index=items.length;render(false);requestAnimationFrame(()=>{index=items.length-1;render(true)})}else{index--;render(true)}};const setActive=(which)=>{$$('.slider-arrows button').forEach(b=>b.classList.remove('active'));which?.classList.add('active');clearTimeout(window.__discountPink);window.__discountPink=setTimeout(()=>which?.classList.remove('active'),950)};const restart=()=>{clearInterval(timer);timer=setInterval(moveNext,3200)};$('.discount-prev')?.addEventListener('click',e=>{e.preventDefault();setActive(e.currentTarget);movePrev();restart()});$('.discount-next')?.addEventListener('click',e=>{e.preventDefault();setActive(e.currentTarget);moveNext();restart()});window.addEventListener('resize',()=>render(false));render(false);restart();const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});$$('.figma-product-card').forEach(el=>observer.observe(el));}
+function initDiscountSlider(){
+ const grid=$('#discountGrid');
+ if(!grid)return;
+ const items=discountItems();
+ if(!items.length)return;
+ if(grid.dataset.sliderReady==='1'){refreshDiscountSliderLanguage(grid,items);return}
+ grid.dataset.sliderReady='1';
+ grid.innerHTML=[...items,...items].map(p=>`<article class="figma-product-card"><a href="product.html?id=${p.id}" class="product-image"><img src="${p.img}" alt="${productName(p)}"><span class="discount-badge">${Math.round((1-p.price/p.old)*100)}% ${getLang()==='en'?'OFF':'خصم'}</span></a><div class="product-name">${productName(p)}</div><div class="product-price"><strong>${money(p.price)}</strong><del>${money(p.old)}</del></div></article>`).join('');
+ let index=0,timer,dragging=false,startX=0,startY=0,startTranslate=0,lastX=0,moved=false;
+ const getVisible=()=>window.innerWidth<=600?2:window.innerWidth<=900?2:4;
+ const step=()=>{const first=grid.querySelector('.figma-product-card');if(!first)return 0;return first.getBoundingClientRect().width+(parseFloat(getComputedStyle(grid).gap)||0)};
+ const render=(animate=true,px=null)=>{grid.style.transition=animate?'transform .72s cubic-bezier(.16,1,.3,1)':'none';grid.style.transform=`translate3d(${px!==null?px:-index*step()}px,0,0)`};
+ const resetLoop=()=>{if(index>=items.length){index=0;render(false)}};
+ const moveNext=()=>{index++;render(true);if(index>=items.length)setTimeout(resetLoop,740)};
+ const movePrev=()=>{if(index<=0){index=items.length;render(false);requestAnimationFrame(()=>{index=items.length-1;render(true)})}else{index--;render(true)}};
+ const setActive=(which)=>{$$('.slider-arrows button').forEach(b=>b.classList.remove('active'));which?.classList.add('active');clearTimeout(window.__discountPink);window.__discountPink=setTimeout(()=>which?.classList.remove('active'),950)};
+ const restart=()=>{clearInterval(timer);timer=setInterval(moveNext,3800)};
+ $('.discount-prev')?.addEventListener('click',e=>{e.preventDefault();setActive(e.currentTarget);movePrev();restart()});
+ $('.discount-next')?.addEventListener('click',e=>{e.preventDefault();setActive(e.currentTarget);moveNext();restart()});
+ // Touch / mouse / trackpad swipe — dragging the products feels like a native mobile carousel.
+ grid.style.touchAction='pan-y';
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;dragging=true;moved=false;startX=e.clientX;startY=e.clientY;lastX=e.clientX;startTranslate=-index*step();grid.classList.add('is-dragging');grid.style.transition='none';clearInterval(timer)};
+ const pointerMove=e=>{if(!dragging)return;const dx=e.clientX-startX,dy=e.clientY-startY;if(Math.abs(dy)>Math.abs(dx)+8){dragging=false;grid.classList.remove('is-dragging');restart();return}lastX=e.clientX;if(Math.abs(dx)>6)moved=true;const resistance=0.78;let px=startTranslate+dx*resistance;const max=-Math.max(0,items.length-1)*step();if(px>35)px=35+(px-35)*.25;if(px<max-35)px=max-35+(px-(max-35))*.25;render(false,px)};
+ const pointerUp=()=>{if(!dragging)return;dragging=false;grid.classList.remove('is-dragging');const dx=lastX-startX;const threshold=Math.min(75,Math.max(42,step()*.18));if(Math.abs(dx)>threshold){if(dx<0)moveNext();else movePrev()}else render(true);restart()};
+ grid.addEventListener('pointerdown',pointerDown,{passive:true});grid.addEventListener('pointermove',pointerMove,{passive:true});grid.addEventListener('pointerup',pointerUp,{passive:true});grid.addEventListener('pointercancel',pointerUp,{passive:true});grid.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&dragging)pointerUp()});
+ grid.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false}},{capture:true});
+ window.addEventListener('resize',()=>render(false));
+ render(false);restart();
+ const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+ $$('.figma-product-card').forEach(el=>observer.observe(el));
+}
 function refreshDiscountSliderLanguage(grid,items){const cards=grid.querySelectorAll('.figma-product-card');cards.forEach((el,i)=>{const p=items[i%items.length];const name=el.querySelector('.product-name'),price=el.querySelector('.product-price strong'),old=el.querySelector('.product-price del'),badge=el.querySelector('.discount-badge');if(name)name.textContent=productName(p);if(price)price.textContent=money(p.price);if(old)old.textContent=money(p.old);if(badge)badge.textContent=`${Math.round((1-p.price/p.old)*100)}% ${getLang()==='en'?'OFF':'خصم'}`})}
 function initHeader(){refreshBadges();document.addEventListener('click',e=>{
  const lang=e.target.closest('[data-lang-toggle]');if(lang){e.preventDefault();setLang(getLang()==='ar'?'en':'ar');applyLanguage(true);renderCards();renderWishlist();renderCart();initProduct();initCheckout();initConfirmation();initDiscountSlider();initRevealAnimations();initClothesAnimations();return}
@@ -80,4 +110,23 @@ function initClothesAnimations(){
  }else targets.forEach(reveal);
 }
 function init(){initHeader();renderCards();renderWishlist();renderCart();initProduct();initSearch();initCheckout();initConfirmation();initDiscountSlider();applyLanguage();initRevealAnimations();initClothesAnimations()}
-document.addEventListener('DOMContentLoaded',init);
+
+function initPageTransitions(){
+ document.body.classList.add('gh-page-ready');
+ document.addEventListener('click',e=>{
+   const a=e.target.closest('a');
+   if(!a)return;
+   const href=a.getAttribute('href');
+   if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||a.target==='_blank'||a.hasAttribute('download'))return;
+   let url;try{url=new URL(href,location.href)}catch{return}
+   if(url.origin!==location.origin)return;
+   if(url.pathname===location.pathname&&url.search===location.search)return;
+   if(e.defaultPrevented)return;
+   e.preventDefault();
+   document.body.classList.remove('gh-page-ready');
+   document.body.classList.add('gh-page-leave');
+   setTimeout(()=>{location.href=url.href},280);
+ },true);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{init();initPageTransitions()});

@@ -316,19 +316,27 @@ html[dir="ltr"] .header-inner{direction:ltr}html[dir="ltr"] .header-right{direct
 .clothes-category .card:hover{transform:translateY(-7px);box-shadow:0 18px 38px rgba(82,47,39,.12)}
 @media(prefers-reduced-motion:reduce){.gh-reveal,.clothes-motion,.clothes-card-motion{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}
 
-/* Mobile header sizing fix — preserves the V17 design/content */
+
+/* V17 mobile + modern interaction polish — keeps all existing content/assets unchanged */
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
 @media(max-width:600px){
-  .figma-header{height:64px}
-  .header-inner{height:64px;padding:0 8px;max-width:none}
-  .figma-header .navlinks{gap:7px}
-  .figma-header .navlinks a{font-size:8px;white-space:nowrap}
-  .figma-header .logo{width:60px;height:50px}
-  .header-left{gap:4px}
-  .mini-user{width:15px;height:15px;font-size:6px;line-height:15px}
-  .cart-icon{font-size:14px}
-  .wish-icon{font-size:18px;width:20px;height:24px;margin:0 1px}
-  .lang{font-size:8px;margin:0}
-  .lang-toggle{padding:3px 4px;font-size:8px}
-  .search-pill{width:68px;height:26px;border-radius:7px;padding:0 7px;font-size:8px}
-  .figma-header .badge{width:15px;height:15px;top:-6px;right:-6px;font-size:7px}
+  .figma-header .logo{width:118px;height:92px;object-fit:contain;flex:none}
+  .figma-header{min-height:74px}
+  .figma-header .inner{min-height:74px}
+  .discount-viewport{overflow:hidden;touch-action:pan-y;cursor:grab;-webkit-overflow-scrolling:touch}
+  .discount-grid{user-select:none;-webkit-user-select:none;will-change:transform}
+  .discount-grid.is-dragging{cursor:grabbing}
+  .figma-product-card{flex:0 0 calc((100% - 10px)/2)}
+  .product-image img{user-select:none;-webkit-user-drag:none}
 }
+
+/* Smooth page-to-page motion */
+@keyframes ghPageEnter{from{opacity:0;transform:translateY(14px) scale(.992);filter:blur(2px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes ghPageExit{from{opacity:1;transform:none;filter:blur(0)}to{opacity:0;transform:translateY(-10px) scale(.994);filter:blur(2px)}}
+body.gh-page-ready{animation:ghPageEnter .52s cubic-bezier(.16,1,.3,1) both}
+body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer-events:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body.gh-page-ready,body.gh-page-leave{animation:none}}
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:ghPageExit .28s ease both}
+::view-transition-new(root){animation:ghPageEnter .5s cubic-bezier(.16,1,.3,1) both}
