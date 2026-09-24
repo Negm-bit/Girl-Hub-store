@@ -623,5 +623,5 @@ body.gh-page-leave{animation:ghPageExit .28s cubic-bezier(.4,0,1,1) both;pointer
 /* Checkout payment note + larger footer logo */
 .payment-note{margin-top:9px;padding:10px 12px;border:1px solid #f0cbd7;background:#fff6f8;color:#8c5268;border-radius:9px;font-size:11px;line-height:1.8;text-align:right}
 .payment-note[hidden]{display:none!important}
-.figma-footer .footer-logo{width:126px;height:104px}
-@media(max-width:600px){.figma-footer .footer-logo{width:112px;height:92px}.payment-note{font-size:10px;padding:9px 10px}}
+.figma-footer .footer-logo{width:142px;height:118px}
+@media(max-width:600px){.figma-footer .footer-logo{width:128px;height:106px}.payment-note{font-size:10px;padding:9px 10px}}
